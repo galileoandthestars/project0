@@ -46,6 +46,68 @@ public class Body{
         return ((6.67e-11)*(b.mass)*(this.mass))/(Math.pow(this.calcDistance(b),2));
     }
 
-    
+    public double calcForceExertedByX(Body b){
+
+        double dispX = b.xxPos - this.xxPos;
+        double netForce = this.calcForceExertedBy(b);
+
+        return (netForce*dispX)/(this.calcDistance(b));
+
+
+    }
+
+    public double calcForceExertedByY(Body b){
+        double dispY = b.yyPos - this.yyPos;
+        double netForce = this.calcForceExertedBy(b);
+
+        return (netForce*dispY)/(this.calcDistance(b));
+
+    }
+
+    public double calcNetForceExertedByX(Body[] b){
+        double netForceX = 0.0;
+        for(Body s : b){
+
+            if(this.equals(s)){
+                continue;
+            }
+            
+            netForceX += this.calcForceExertedByX(s);
+        }
+
+        return netForceX;
+
+    }
+
+    public double calcNetForceExertedByY(Body[] b){
+        double netForceY = 0.0;
+        for(Body s : b){
+
+            if(this.equals(s)){
+                continue;
+            }
+            
+            netForceY += this.calcForceExertedByY(s);
+        }
+
+        return netForceY;
+        
+    }
+
+    //method that determines how much the forces exerted on the body will
+    //cause that boy to accelerate
+    public void update(double dt, double fX, double fY){
+
+        double vNewX = this.xxVel + dt * (fX / this.mass);
+        double vNewY = this.yyVel + dt * (fY / this.mass);
+        double pNewX = this.xxPos + dt * vNewX;
+        double pNewY = this.yyPos + dt * vNewY;
+
+        xxVel = vNewX;
+        yyVel = vNewY;
+        xxPos = pNewX;
+        yyPos = pNewY;
+
+    }
 
 }
